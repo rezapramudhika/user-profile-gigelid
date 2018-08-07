@@ -27,7 +27,7 @@ module.exports = {
         })
     },
     get: (req, res) => {
-        model.User.find().then(data => {
+        model.User.findAll().then(data => {
             res.status(200).json({
                 msg: 'Success',
                 data
@@ -107,7 +107,7 @@ module.exports = {
                 }
             })
             .catch(err => {
-                res.status(404).json({
+                res.status(500).json({
                     msg: 'Internal Server Error'
                 })
             })
