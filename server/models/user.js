@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         isUnique: function (value, next) {
-          var self = this;
+          let self = this;
           User.find({ where: { email: value } })
             .then(function (user) {
               // reject if a different user wants to use the same email
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         isUnique: function (value, next) {
-          var self = this;
+          let self = this;
           User.find({ where: { contact: value } })
             .then(function (user) {
               if (user && self.id !== user.id) {
