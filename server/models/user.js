@@ -43,7 +43,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
       }
-    }
+    },
+    gender: DataTypes.STRING,
+    birthofdate: DataTypes.STRING,
+    imgUrl: DataTypes.STRING,
   }, {});
   User.associate = function (models) {
     // associations can be defined here

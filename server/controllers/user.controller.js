@@ -90,7 +90,7 @@ module.exports = {
                     if (check) {
                         const token = jwt.sign({ id: data.id, email: data.email }, process.env.SECRETKEY);
                         data.password = 'hidden';
-                        data.token = token;
+                        data.dataValues.token = token;
                         res.status(200).json({
                             msg: 'Success',
                             data
@@ -111,5 +111,18 @@ module.exports = {
                     msg: 'Internal Server Error'
                 })
             })
-    }
+    },
+    findById: (req, res) => {
+        model.User.findById(req.decoded.id).then(data => {
+            res.status(200).json({
+                msg: 'Success',
+                data
+            })
+        }).catch(err => {
+            res.status(500).json({
+                msg: 'Error',
+                err
+            })
+        })
+    },
 }
