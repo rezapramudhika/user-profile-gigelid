@@ -9,9 +9,13 @@ import {
     UPLOAD_IMAGE_SUCCESS,
     UPLOAD_IMAGE_LOADING,
     UPLOAD_IMAGE_ERROR,
-    SET_IMG_URL
+    SET_IMG_URL,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_LOADING,
+    CHANGE_PASSWORD_ERROR
 } from './profile.actionTypes';
 import axios from '../../axios';
+import swal from 'sweetalert2';
 
 export const getProfile = () => {
     return dispatch => {
@@ -34,6 +38,44 @@ export const updateProfile = (payload) => {
             }).catch(err => {
                 dispatch(updateProfileError(err.response.status));
             })
+    }
+}
+
+export const changePassword = (payload) => {
+    return dispatch => {
+        dispatch(changePasswordLoading());
+        axios.put('/profile/changePassword', payload)
+            .then(async data => {
+                await swal({
+                    type: 'success',
+                    title: 'Password Changed!',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                await dispatch(changePasswordSuccess());
+                window.location.href = '/'
+            }).catch(err => {
+                dispatch(changePasswordError(err.response.status));
+            })
+    }
+}
+
+const changePasswordSuccess = () => {
+    return {
+        type: CHANGE_PASSWORD_SUCCESS,
+    }
+}
+
+const changePasswordLoading = () => {
+    return {
+        type: CHANGE_PASSWORD_LOADING,
+    }
+}
+
+const changePasswordError = (payload) => {
+    return {
+        type: CHANGE_PASSWORD_ERROR,
+        payload
     }
 }
 
@@ -102,6 +144,7 @@ const updateProfileError = (payload) => {
         payload
     }
 }
+
 const uploadImageSuccess = (payload) => {
     return {
         type: UPLOAD_IMAGE_SUCCESS,

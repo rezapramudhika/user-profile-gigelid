@@ -9,7 +9,10 @@ import {
     UPLOAD_IMAGE_SUCCESS,
     UPLOAD_IMAGE_LOADING,
     UPLOAD_IMAGE_ERROR,
-    SET_IMG_URL
+    SET_IMG_URL,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_LOADING,
+    CHANGE_PASSWORD_ERROR
 } from './profile.actionTypes';
 import moment from 'moment';
 
@@ -22,7 +25,10 @@ const initialState = {
     updateProfileLoading: false,
     updateProfileError: false,
     uploadImageLoading: false,
-    uploadImageError: false
+    uploadImageError: false,
+    changePasswordErrorCode: 0,
+    changePasswordLoading: false,
+    changePasswordError: false,
 }
 
 const reducers = (state = initialState, action) => {
@@ -97,6 +103,26 @@ const reducers = (state = initialState, action) => {
                 ...state,
                 uploadImageLoading: false,
                 uploadImageError: true
+            }
+        case CHANGE_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                changePasswordErrorCode: 0,
+                changePasswordLoading: false,
+                changePasswordError: false
+            }
+        case CHANGE_PASSWORD_LOADING:
+            return {
+                ...state,
+                changePasswordError: false,
+                changePasswordLoading: true,
+            }
+        case CHANGE_PASSWORD_ERROR:
+            return {
+                ...state,
+                changePasswordErrorCode: action.payload,
+                changePasswordLoading: false,
+                changePasswordError: true
             }
         default:
             return state;

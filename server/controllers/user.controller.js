@@ -26,14 +26,14 @@ module.exports = {
         })
     },
     checkEmail: (req, res) => {
-        model.User.find({ 
-            where: { email: req.query.email } 
+        model.User.find({
+            where: { email: req.query.email }
         }).then(data => {
-            if(data){
+            if (data) {
                 res.status(403).json({
                     msg: 'Email already in use!'
                 })
-            }else{
+            } else {
                 res.status(200).json({
                     msg: 'Email available'
                 })
@@ -46,14 +46,14 @@ module.exports = {
         })
     },
     checkContact: (req, res) => {
-        model.User.find({ 
-            where: { contact: req.query.contact } 
+        model.User.find({
+            where: { contact: req.query.contact }
         }).then(data => {
-            if(data){
+            if (data) {
                 res.status(403).json({
                     msg: 'Phone number already in use!'
                 })
-            }else{
+            } else {
                 res.status(200).json({
                     msg: 'Phone number available'
                 })
@@ -76,11 +76,12 @@ module.exports = {
                     if (check) {
                         const token = jwt.sign({ id: data.id, email: data.email }, process.env.SECRETKEY);
                         data.dataValues.token = token;
+                        data.password = 'hidden';
                         res.status(200).json({
                             msg: 'Success',
                             data
                         })
-                    }else {
+                    } else {
                         res.status(401).json({
                             msg: 'Bad Credentials'
                         });
@@ -100,6 +101,7 @@ module.exports = {
     },
     findById: (req, res) => {
         model.User.findById(req.decoded.id).then(data => {
+            data.password = 'hidden';
             res.status(200).json({
                 msg: 'Success',
                 data
@@ -110,5 +112,5 @@ module.exports = {
                 err
             })
         })
-    },
+    }
 }

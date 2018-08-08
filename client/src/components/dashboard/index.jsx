@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProfile } from '../../store/profile/profile.actions';
+import { getProfile, changePassword } from '../../store/profile/profile.actions';
 import { bindActionCreators } from 'redux';
 import { BarLoader } from 'react-spinners';
 import ProfileImage from './profileImage';
 import ProfileEditForm from './profileEditForm';
+import isPassword from '../../helper/isPassword';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            inputOldPassword: '',
+            inputNewPassword: '',
+            inputConfirmPassword: '',
+            confirmErrMsg: '',
+            passwordErrMsg: '',
+            newPasswordStatus: false
+        }
     }
 
     componentDidMount() {
@@ -22,6 +30,50 @@ class Dashboard extends Component {
     logout = () => {
         localStorage.clear();
         this.props.history.push('/login')
+    }
+
+    passOnChange = (e) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
+    }
+
+    passwordValidator = (e) => {
+        if (isPassword(e.target.value)) {
+            this.setState({
+                passwordErrMsg: '',
+                newPasswordStatus: true,
+                inputNewPassword: e.target.value
+            })
+        } else {
+            this.setState({
+                passwordErrMsg: 'Password must contain at least 8 characters and have a combination of numbers and letters',
+                newPasswordStatus: false
+            })
+        }
+    }
+
+    confirmNewPass = (e) => {
+        if (this.state.inputNewPassword !== e.target.value) {
+            this.setState({
+                inputConfirmPassword: e.target.value,
+                confirmErrMsg: 'Password not match',
+                newPasswordStatus: false
+            });
+        } else {
+            this.setState({
+                inputConfirmPassword: e.target.value,
+                confirmErrMsg: '',
+                newPasswordStatus: true
+            });
+        }
+    }
+
+    changePassword = () => {
+        this.props.changePassword({
+            oldPassword: this.state.inputOldPassword,
+            newPassword: this.state.inputNewPassword
+        })
     }
 
     render() {
@@ -65,6 +117,57 @@ class Dashboard extends Component {
                         <ProfileEditForm data={this.props.profile.profile} />
                     </div>
                 </div>
+                <div className="modal fade" id="changePasswordModal" tabIndex="-1" role="dialog" aria-labelledby="changePasswordTitle" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div id='modal-content' className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLongTitle">Change Password</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {
+                                    this.props.profile.changePasswordErrorCode === 401 &&
+                                    <div className="alert alert-danger" role="alert">
+                                        Old password is wrong
+                                    </div>
+                                }
+                                <form>
+                                    <div className="form-group">
+                                        <input type="password" className="form-control" id="inputOldPassword" placeholder="Old Password" onChange={this.passOnChange} />
+                                    </div>
+                                    <div className="form-group">
+                                        <input type="password" className="form-control" id="inputNewPassword" placeholder="New Password" onChange={this.passwordValidator} />
+                                        <small id="passwordValidator" className="form-text text-danger">{this.state.passwordErrMsg}</small>
+                                    </div>
+                                    <div className="form-group">
+                                        <input type="password" className="form-control" id="inputConfirmPassword" placeholder="Confirm New Password" onChange={this.confirmNewPass} />
+                                        <small id="passwordValidator" className="form-text text-danger">{this.state.confirmErrMsg}</small>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                {
+                                    this.props.profile.changePasswordLoading ?
+                                        <button type="button" className="btn btn-primary" disabled>Save</button> :
+                                        this.state.newPasswordStatus && this.state.inputConfirmPassword !== '' ?
+                                            <button type="button" className="btn btn-primary" onClick={this.changePassword}>Save</button> :
+                                            <button type="button" className="btn btn-primary" disabled>Save</button>
+                                }
+                            </div>
+                            {
+                                this.props.profile.changePasswordLoading &&
+                                <BarLoader
+                                    width={'100%'}
+                                    color={'#007bff'}
+                                    loading={this.props.loading}
+                                />
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -95,7 +198,8 @@ const mapStateToProps = state => {
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    getProfile
+    getProfile,
+    changePassword
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

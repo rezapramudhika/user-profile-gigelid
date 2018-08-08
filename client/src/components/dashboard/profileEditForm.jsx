@@ -95,6 +95,9 @@ class ProfileEditForm extends Component {
                         </div>
                     </div>
                 </form>
+                <div className='text-center'>
+                    <a href={'..'} data-toggle="modal" data-target="#changePasswordModal">Change password</a>
+                </div>
                 {
                     this.props.profile.updateProfileLoading ?
                         <button id='updateBtn' className="btn btn-block btn-primary mt-4" disabled>Save</button> :
