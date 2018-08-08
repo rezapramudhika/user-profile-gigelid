@@ -16,3 +16,19 @@ You're on the homepage. You can edit your information such as name, date of birt
 If you want to change your password, you can click change password link then input your old password, and new password.
 
 <img src="https://github.com/rezapramudhika/user-profile-gigelid/blob/dev/docs/change-password.gif?raw=true" width="240">
+
+### Installation
+1. Install the dependencies and start the server.
+```sh
+$ cd server
+$ npm install
+$ npm start
+```
+2. Start the client.
+```sh
+$ cd client
+$ npm install
+$ npm start
+```
+
+The server may not work properly because it requires multiple credentials such as the google cloud service account, database configuration, and jsonwebtoken secret key.
