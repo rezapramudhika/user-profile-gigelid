@@ -5,7 +5,6 @@ import { login } from '../store/user/user.actions';
 import { bindActionCreators } from 'redux';
 import isEmail from '../helper/isEmailFormat';
 import { BarLoader } from 'react-spinners';
-// import isPassword from '../helper/isPassword';
 
 class Login extends Component {
     constructor(props) {
@@ -67,7 +66,15 @@ class Login extends Component {
         return (
             <div style={styles.container100vh}>
                 <div className="h-100 row align-items-center">
-                    <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4 col-sm-8 offset-sm-2 bg-white p-0">
+                    <div id ='login-container' className="col-md-6 offset-md-3 col-lg-4 offset-lg-4 col-sm-8 offset-sm-2 bg-white p-0">
+                        {
+                            this.props.user.loginLoading &&
+                            <BarLoader
+                                width={document.querySelector('#login-container').clientWidth}
+                                color={'#007bff'}
+                                loading={this.props.loading}
+                            />
+                        }
                         <div className='p-5'>
                             <div className='mb-3 text-center'>
                                 <img style={styles.center} src="https://gigel.id/images/gigel-logo.png" alt="Gigel logo" width={200} />
@@ -116,14 +123,6 @@ class Login extends Component {
                                 </p>
                             </div>
                         </div>
-                        {
-                            this.props.user.loginLoading &&
-                            <BarLoader
-                                width={'100%'}
-                                color={'#3d4b63'}
-                                loading={this.props.loading}
-                            />
-                        }
                     </div>
                 </div>
             </div>
