@@ -3,7 +3,6 @@ const model = require('../models');
 module.exports = {
     findById: (req, res) => {
         model.User.findById(req.decoded.id).then(data => {
-            data.password = 'hidden'
             res.status(200).json({
                 msg: 'Success',
                 data
