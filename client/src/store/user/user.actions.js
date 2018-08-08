@@ -22,6 +22,8 @@ export const login = (payload) => {
             password: payload.password
         }).then(data => {
             dispatch(loginSuccess(data));
+            localStorage.setItem('token', data.data.data.token)
+            window.location.href = '/';
         }).catch(err => {
             dispatch(loginError(err.response.status));
         })
