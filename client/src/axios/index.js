@@ -4,7 +4,7 @@ const token = localStorage.getItem('token');
 
 const instance = axios.create({
     timeout: 30000,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://gigel-server.rezapramudhika.com',
     headers: { token }
 })
 
