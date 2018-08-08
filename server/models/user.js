@@ -48,6 +48,14 @@ module.exports = (sequelize, DataTypes) => {
     birthofdate: DataTypes.STRING,
     imgUrl: DataTypes.STRING,
   }, {});
+  
+  User.prototype.toJSON =  function () {
+    var values = Object.assign({}, this.get());
+  
+    delete values.password;
+    return values;
+  }
+
   User.associate = function (models) {
     // associations can be defined here
   };

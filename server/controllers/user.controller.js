@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     register: (req, res) => {
-        const { email, name, password, contact } = req.body
+        const { email, name, password, contact } = req.body;
         let salt = bcrypt.genSaltSync(saltRounds);
         let hash = bcrypt.hashSync(password, salt);
         model.User.create({
@@ -14,20 +14,6 @@ module.exports = {
             password: hash,
             contact
         }).then(data => {
-            data.password = 'Hidden'
-            res.status(200).json({
-                msg: 'Success',
-                data
-            })
-        }).catch(err => {
-            res.status(500).json({
-                msg: 'Error',
-                err
-            })
-        })
-    },
-    get: (req, res) => {
-        model.User.findAll().then(data => {
             res.status(200).json({
                 msg: 'Success',
                 data
@@ -89,7 +75,6 @@ module.exports = {
                     let check = bcrypt.compareSync(password, data.password);
                     if (check) {
                         const token = jwt.sign({ id: data.id, email: data.email }, process.env.SECRETKEY);
-                        data.password = 'hidden';
                         data.dataValues.token = token;
                         res.status(200).json({
                             msg: 'Success',
