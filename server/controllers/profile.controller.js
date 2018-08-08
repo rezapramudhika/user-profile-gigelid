@@ -21,9 +21,16 @@ module.exports = {
                 id: req.decoded.id
             }
         }).then(data => {
-            res.status(200).json({
-                msg: 'Success',
-                data
+            model.User.findById(req.decoded.id).then(data => {
+                res.status(200).json({
+                    msg: 'Success',
+                    data
+                });
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    msg: 'Internal Server Error'
+                })
             });
         }).catch(err => {
             console.log(err);
@@ -39,9 +46,16 @@ module.exports = {
                 id: req.decoded.id
             }
         }).then(data => {
-            res.status(200).json({
-                msg: 'Success',
-                data
+            model.User.findById(req.decoded.id).then(data => {
+                res.status(200).json({
+                    msg: 'Success',
+                    data: data
+                });
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    msg: 'Internal Server Error'
+                })
             });
         }).catch(err => {
             console.log(err);

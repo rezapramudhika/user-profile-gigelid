@@ -6,3 +6,7 @@ body {
   padding: 0;
   font-family: 'Raleway', sans-serif;
 }
+
+.pointer {
+  cursor: pointer;
+}
